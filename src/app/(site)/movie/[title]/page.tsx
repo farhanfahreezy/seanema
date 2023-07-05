@@ -35,7 +35,7 @@ const getMovieByTitle = async (title: string): Promise<MovieDetail | null> => {
 };
 
 const page: FC<pageProps> = ({ params }) => {
-  const [movie, setMovie] = useState<MovieDetail | null>(null);
+  const [movie, setMovie] = useState<MovieDetail | null | 0>(0);
 
   useEffect(() => {
     // Decode string uri-nya
@@ -48,7 +48,9 @@ const page: FC<pageProps> = ({ params }) => {
   return (
     <div className="relative flex flex-col justify-center items-center w-full min-h-screen overflow-x-hidden py-[150px]">
       <Navbar />
-      {movie ? (
+      {movie === 0 ? (
+        <div>Loading...</div>
+      ) : movie ? (
         <>
           <div className="z-[-100]">
             <div className="absolute top-0 left-0 h-[90vh] w-full overflow-hidden z-[11] bg-gradient-to-t from-primaryBg to-transparent" />
@@ -91,7 +93,7 @@ const page: FC<pageProps> = ({ params }) => {
           </div>
         </>
       ) : (
-        <div className="absolute top-50 bg-gradient-to-br from-primaryYellow to-secondaryYellow py-2 px-6 text-[48px] font-medium rounded-xl">
+        <div className="absolute top-50 border-2 border-primaryYellow py-2 px-6 text-[48px] font-medium rounded-xl">
           Movie Not Found
         </div>
       )}

@@ -27,7 +27,7 @@ const Navbar = () => {
       }`}
     >
       <img
-        src="seanema.svg"
+        src="/seanema.svg"
         alt="seanema"
         className={`${
           isScrolled ? "w-[200px]" : "w-[250px]"

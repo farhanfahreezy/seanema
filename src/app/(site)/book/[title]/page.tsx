@@ -5,7 +5,6 @@ import Navbar from "@/components/Navbar";
 import SeatPicker from "@/components/SeatPicker";
 import axios from "axios";
 import Link from "next/link";
-import { title } from "process";
 import { ChangeEvent, FC, useEffect, useState } from "react";
 
 interface pageProps {
@@ -43,8 +42,16 @@ const getMovieByTitle = async (title: string): Promise<MovieDetail | null> => {
   }
 };
 
+function formatDate(date: Date) {
+  const day = date.getDate().toString().padStart(2, "0"); // Get the day and pad with leading zero if necessary
+  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Get the month (Note: month is zero-based) and pad with leading zero if necessary
+  const year = date.getFullYear().toString(); // Get the full year
+
+  return `${day}-${month}-${year}`;
+}
+
 const page: FC<pageProps> = ({ params }) => {
-  const [movie, setMovie] = useState<MovieDetail | null>(null);
+  const [movie, setMovie] = useState<MovieDetail | null | 0>(0);
   const [date, setDate] = useState<Date>(new Date());
   const [time, setTime] = useState("11:00");
   const [selectedSeat, setSelectedSeat] = useState<number[]>([]);
@@ -91,14 +98,12 @@ const page: FC<pageProps> = ({ params }) => {
   seats[24].isBooked = true;
   // END OF DUMMY
 
-  useEffect(() => {
-    console.log(selectedSeat);
-  }, [selectedSeat]);
-
   return (
     <div className="relative flex flex-col justify-center items-center w-full min-h-screen overflow-x-hidden py-[150px]">
       <Navbar />
-      {movie ? (
+      {movie === 0 ? (
+        <div>Loading...</div>
+      ) : movie ? (
         <>
           {/* BACKGROUND */}
           <div className="z-[-100]">
@@ -181,7 +186,7 @@ const page: FC<pageProps> = ({ params }) => {
                     "/payment/" +
                     movie.title +
                     "/" +
-                    date.toISOString() +
+                    formatDate(date) +
                     time +
                     selectedSeat.toString()
                   }
@@ -195,7 +200,7 @@ const page: FC<pageProps> = ({ params }) => {
           </div>
         </>
       ) : (
-        <div className="absolute top-50 bg-gradient-to-br from-primaryYellow to-secondaryYellow py-2 px-6 text-[48px] font-medium rounded-xl">
+        <div className="absolute top-50 border-2 border-primaryYellow py-2 px-6 text-[48px] font-medium rounded-xl">
           Movie Not Found
         </div>
       )}
