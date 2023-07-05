@@ -1,4 +1,5 @@
 import MovieCard from "./MovieCard";
+import style from "./MovieList.module.css";
 
 interface MovieCardProps {
   title: string;
@@ -12,7 +13,7 @@ interface MovieListProps {
 
 const MovieList = ({ movieCards }: MovieListProps) => {
   return (
-    <div className="flex flex-row w-full py-10 overflow-x-auto justify-start gap-5">
+    <div className={style.custom}>
       {movieCards.map((card, index) => (
         <MovieCard key={index} {...card} />
       ))}

@@ -39,13 +39,20 @@ export default function Home() {
   return (
     <div className="relative flex flex-col justify-start items-start w-full min-h-screen overflow-x-hidden">
       <Navbar />
-      <div className="flex flex-col pt-[150px] w-full px-2 lg:px-10 py-10">
-        <div className="text-[36px] font-bold">Now Showing on Cinema</div>
-        {movieList ? (
-          <MovieList movieCards={movieList} />
-        ) : (
-          <div>Loading...</div>
-        )}
+      <div className="flex flex-col pt-[120px] sm:pt-[150px] w-full px-2 lg:px-10 py-10 gap-10">
+        <div>
+          <div className="text-[24px] lg:text-[30px] font-semibold">
+            Now Showing on Seanema
+          </div>
+          {movieList ? (
+            <MovieList movieCards={movieList} />
+          ) : (
+            <div>Loading...</div>
+          )}
+        </div>
+        <div>
+          <div className="text-[30px] font-bold">Featured</div>
+        </div>
       </div>
     </div>
   );

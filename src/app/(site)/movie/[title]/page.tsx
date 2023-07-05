@@ -52,6 +52,7 @@ const page: FC<pageProps> = ({ params }) => {
         <div>Loading...</div>
       ) : movie ? (
         <>
+          {/* BACKGROUND SECTION */}
           <div className="z-[-100]">
             <div className="absolute top-0 left-0 h-[90vh] w-full overflow-hidden z-[11] bg-gradient-to-t from-primaryBg to-transparent" />
             <div className="absolute top-0 left-0 h-[90vh] w-full overflow-hidden z-[10]">
@@ -63,29 +64,46 @@ const page: FC<pageProps> = ({ params }) => {
             </div>
           </div>
 
+          {/* PAGE CONTENT */}
           <div className="flex flex-col md:flex-row justify-start items-center w-full h-full px-10 gap-8">
+            {/* POSTER */}
             <img
               src={movie?.poster_url}
               alt={movie.title}
-              className="w-auto h-[80vh] lg:h-[600px] rounded-xl shadow-2xl"
+              className="lg:w-auto w-full h-auto lg:h-[600px] rounded-xl shadow-2xl"
             />
-            <div className="flex flex-col justify-center items-start w-auto h-[0vh] lg:h-[600px]">
+
+            {/* DESKRIPSi */}
+            <div className="flex flex-col justify-center items-start w-auto">
               <div className="text-[48px] font-medium">{movie.title}</div>
               <div className="text-[24px] font-light">{movie.description}</div>
-              <div className="flex flex-row items-center gap-5 py-10">
-                <div className="flex flex-col bg-gradient-to-br from-primaryYellow to-secondaryYellow items-center justify-center py-2 px-4 rounded-xl gap-2">
-                  <div className="font-medium text-[16px]">Release Date</div>
-                  <div className="bg-secondaryBg px-3 py-1 rounded-md">
-                    {movie.release_date}
+              <div className="flex flex-col sm:flex-row pb-10 sm:pb-5 items-center sm:gap-5">
+                <div className="flex flex-row items-center gap-5 py-5 sm:py-10">
+                  <div className="flex flex-col bg-gradient-to-br from-primaryYellow to-secondaryYellow items-center justify-center py-2 px-4 rounded-xl gap-2">
+                    <div className="font-medium text-[16px]">Release Date</div>
+                    <div className="bg-secondaryBg px-3 py-1 rounded-md">
+                      {movie.release_date}
+                    </div>
+                  </div>
+                  <div className="flex flex-col bg-gradient-to-br h-[80px] from-primaryYellow to-secondaryYellow items-center justify-center py-2 px-4 rounded-xl gap-2 font-bold text-[32px]">
+                    <div>{movie.age_rating}+</div>
                   </div>
                 </div>
-                <div className="flex flex-col bg-gradient-to-br h-[80px] from-primaryYellow to-secondaryYellow items-center justify-center py-2 px-4 rounded-xl gap-2 font-bold text-[32px]">
-                  <div>{movie.age_rating}+</div>
-                </div>
+                <Link
+                  href={
+                    "https://www.youtube.com/results?search_query=" +
+                    movie.title.replace(" ", "+")
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col hover:text-white hover:bg-gradient-to-br from-primaryYellow to-secondaryYellow h-[80px] border-2  items-center justify-center py-2 px-6 rounded-xl gap-2 font-bold text-[32px] hover:scale-105 active:scale-[0.98] transition-all"
+                >
+                  Watch Trailer
+                </Link>
               </div>
               <Link
                 href={"/book/" + movie.title}
-                className="text-[36px] py-2 px-6 font-medium rounded-3xl bg-transparent hover:bg-gradient-to-br from-primaryYellow to-secondaryYellow transition-all border-2 border-primaryYellow hover:border-white hover:scale-105 active:scale-95"
+                className="text-[36px] py-2 px-6 w-full text-center sm:w-fit font-medium rounded-xl bg-transparent hover:bg-gradient-to-br from-primaryYellow to-secondaryYellow transition-all border-2 border-primaryYellow hover:border-white hover:scale-105 active:scale-95"
               >
                 Buy Ticket
               </Link>

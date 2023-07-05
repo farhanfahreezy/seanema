@@ -53,10 +53,14 @@ const page: FC<pageProps> = ({ params }) => {
 
   function parseDateString(dateString: string) {
     const datePart = dateString.substring(0, 10);
+    const dateArray: string[] = [];
+    dateArray.push(datePart.substring(3, 5));
+    dateArray.push(datePart.substring(0, 2));
+    dateArray.push(datePart.substring(6));
     const timePart = dateString.substring(10, 15);
     const integerPart = dateString.substring(15);
 
-    const dateObject = new Date(datePart);
+    const dateObject = new Date(dateArray.join("/"));
     const integerArray = integerPart.split(",").map(Number); // Split the integer part and convert to an array of integers
 
     return {
