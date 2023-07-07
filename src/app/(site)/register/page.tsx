@@ -31,7 +31,7 @@ export default function Home() {
         </h2>
         <div className="flex justify-center items-center w-full">
           <p className="bg-primaryYellow py-1 px-3 font-semibold rounded-md text-primaryBg">
-            it's free!
+            {"it's free!"}
           </p>
         </div>
       </div>

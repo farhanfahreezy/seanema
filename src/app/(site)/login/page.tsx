@@ -89,7 +89,7 @@ export default function Home() {
             </button>
             <Link href={"/register"} className="flex justify-center w-full">
               <p className="pt-2 text-sm text-primaryYellow opacity-[70%] hover:opacity-[100%] transition-all">
-                doesn't have an account?
+                {"doesn't have an account?"}
               </p>
             </Link>
           </div>

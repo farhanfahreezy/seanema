@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -11,9 +12,12 @@ const MovieCard = ({ title, poster_url, age_rating }: MovieCardProps) => {
   return (
     <div className="flex flex-col justify-start items-center w-fit">
       <Link href={"/movie/" + title} className="w-[50vw] max-w-[300px]">
-        <img
+        <Image
           src={poster_url}
           alt={title}
+          width={0}
+          height={0}
+          sizes="100vw"
           className="w-full rounded-2xl shadow-xl hover:scale-[1.05] transition-all"
         />
       </Link>

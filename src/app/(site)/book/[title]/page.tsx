@@ -3,8 +3,8 @@
 import Dropdown from "@/components/Dropdown";
 import Navbar from "@/components/Navbar";
 import SeatPicker from "@/components/SeatPicker";
-import UserFetcher from "@/components/UserFetcher";
 import axios from "axios";
+import Image from "next/image";
 import Link from "next/link";
 import { ChangeEvent, FC, useEffect, useState } from "react";
 
@@ -32,7 +32,7 @@ interface SeatProps {
 const username = "notspidey";
 // END OF DUMMY
 
-const page: FC<pageProps> = ({ params }) => {
+const Page: FC<pageProps> = ({ params }) => {
   // CONST
   const [movie, setMovie] = useState<MovieDetail | null | 0>(0);
   const [date, setDate] = useState<Date>(new Date());
@@ -133,9 +133,12 @@ const page: FC<pageProps> = ({ params }) => {
           <div className="z-[-100]">
             <div className="absolute top-0 left-0 h-[90vh] w-full overflow-hidden z-[11] bg-gradient-to-t from-primaryBg to-transparent" />
             <div className="absolute top-0 left-0 h-[90vh] w-full overflow-hidden z-[10]">
-              <img
+              <Image
                 src={movie?.poster_url}
                 alt={movie.title}
+                width={0}
+                height={0}
+                sizes="100vw"
                 className="w-full h-auto blur-sm opacity-50"
               />
             </div>
@@ -146,9 +149,12 @@ const page: FC<pageProps> = ({ params }) => {
             <div className="flex flex-col w-full lg:w-[40%] items-center justify-center">
               {/* MOVIE TICKET */}
               <div className="flex flex-row gap-5">
-                <img
+                <Image
                   src={movie?.poster_url}
                   alt={movie.title}
+                  width={0}
+                  height={0}
+                  sizes="100vw"
                   className="w-auto h-[200px] rounded-xl shadow-2xl"
                 />
                 <div className="flex flex-col justify-center items-start text-[24px] font-medium">
@@ -245,4 +251,4 @@ const page: FC<pageProps> = ({ params }) => {
   );
 };
 
-export default page;
+export default Page;

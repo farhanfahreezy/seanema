@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
@@ -42,9 +43,12 @@ const Navbar = () => {
             : "px-[20px] sm:px-[40px] lg:px-[50px] bg-transparent"
         }`}
       >
-        <img
+        <Image
           src={"/seanema-short.svg"}
           alt="seanema"
+          width={0}
+          height={0}
+          sizes="100vw"
           className={`${
             isScrolled ? "h-[30px] sm:h-[45px]" : "h-[40px] sm:h-[60px]"
           } w-auto transition-all`}

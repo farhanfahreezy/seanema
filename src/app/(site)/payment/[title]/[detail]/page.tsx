@@ -2,6 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import axios from "axios";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
@@ -40,7 +41,7 @@ interface UserDetail {
 const dummyUsername = "notspidey";
 // END OF DUMMY
 
-const page: FC<pageProps> = ({ params }) => {
+const Page: FC<pageProps> = ({ params }) => {
   // CONST
   const [paymentDetail, setPaymentDetail] = useState<PaymentDetail | null>(
     null
@@ -138,9 +139,12 @@ const page: FC<pageProps> = ({ params }) => {
             {/* TICKET */}
             <div className="flex flex-col w-full lg:w-[60%] xl:w-[55%] items-center justify-center">
               <div className="relative">
-                <img
+                <Image
                   src="/ticket.svg"
                   alt="ticket"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
                   className="w-[400px] lg:w-[600px] h-auto"
                 />
                 <div className="absolute top-0 h-full w-full pr-9 lg:pr-14 py-7 lg:py-10 pl-24 lg:pl-36">
@@ -228,4 +232,4 @@ const page: FC<pageProps> = ({ params }) => {
   );
 };
 
-export default page;
+export default Page;

@@ -3,6 +3,7 @@
 import Navbar from "@/components/Navbar";
 import UserFetcher from "@/components/UserFetcher";
 import axios from "axios";
+import Image from "next/image";
 import Link from "next/link";
 import { FC, useEffect, useState } from "react";
 
@@ -35,7 +36,7 @@ const getMovieByTitle = async (title: string): Promise<MovieDetail | null> => {
   }
 };
 
-const page: FC<pageProps> = ({ params }) => {
+const Page: FC<pageProps> = ({ params }) => {
   const [movie, setMovie] = useState<MovieDetail | null | 0>(0);
 
   useEffect(() => {
@@ -57,9 +58,12 @@ const page: FC<pageProps> = ({ params }) => {
           <div className="z-[-100]">
             <div className="absolute top-0 left-0 h-[90vh] w-full overflow-hidden z-[11] bg-gradient-to-t from-primaryBg to-transparent" />
             <div className="absolute top-0 left-0 h-[90vh] w-full overflow-hidden z-[10]">
-              <img
+              <Image
                 src={movie?.poster_url}
                 alt={movie.title}
+                width={0}
+                height={0}
+                sizes="100vw"
                 className="w-full h-auto blur-sm opacity-50"
               />
             </div>
@@ -68,9 +72,12 @@ const page: FC<pageProps> = ({ params }) => {
           {/* PAGE CONTENT */}
           <div className="flex flex-col md:flex-row justify-start items-center w-full h-full px-10 gap-8">
             {/* POSTER */}
-            <img
+            <Image
               src={movie?.poster_url}
               alt={movie.title}
+              width={0}
+              height={0}
+              sizes="100vw"
               className="lg:w-auto w-full h-auto lg:h-[600px] rounded-xl shadow-2xl"
             />
 
@@ -120,4 +127,4 @@ const page: FC<pageProps> = ({ params }) => {
   );
 };
 
-export default page;
+export default Page;
