@@ -47,7 +47,7 @@ const Page: FC<pageProps> = ({ params }) => {
     getMovieByTitle(newTitle).then((movies) => {
       setMovie(movies);
     });
-  }, []);
+  }, [params.title]);
 
   // FUNCTION
   const getMovieByTitle = async (

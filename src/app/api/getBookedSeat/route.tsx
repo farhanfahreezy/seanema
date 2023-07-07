@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
 
   const transactionHistory = await prisma.transaction.findMany({
     where: {
-      title,
+      title: title!,
       date,
       time,
     },
