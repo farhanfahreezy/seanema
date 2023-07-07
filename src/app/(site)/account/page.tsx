@@ -3,7 +3,9 @@
 import Navbar from "@/components/Navbar";
 import UserFetcher from "@/components/UserFetcher";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface UserDetail {
@@ -20,6 +22,15 @@ const dummyUsername = "notspidey";
 export default function Home() {
   // CONST
   const [userDetail, setUserDetail] = useState<UserDetail | null>(null);
+  const router = useRouter();
+  const session = useSession();
+
+  // HOOKS
+  useEffect(() => {
+    if (session?.status !== "authenticated") {
+      router.push("/login");
+    }
+  }, []);
 
   // FUNCTION
   const formatter = new Intl.NumberFormat("en-US", {

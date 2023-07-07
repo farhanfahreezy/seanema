@@ -3,6 +3,8 @@
 import Navbar from "@/components/Navbar";
 import TransactionList from "@/components/TransactionList";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface PaymentDetail {
@@ -23,19 +25,27 @@ export default function Home() {
   const [transactionList, setTransactionList] = useState<
     PaymentDetail[] | null
   >(null);
+  const router = useRouter();
+  const session = useSession();
 
   // HOOKS
   useEffect(() => {
-    axios
-      .get("/api/getUserTransaction/", { params: { username: dummyUsername } })
-      .then((res) => {
-        const newTransactionList = res.data.map((item: PaymentDetail) => ({
-          ...item,
-          date: new Date(item.date),
-        }));
-        setTransactionList(newTransactionList);
-      })
-      .catch((err) => console.log(err));
+    if (session?.status !== "authenticated") {
+      router.push("/login");
+    } else {
+      axios
+        .get("/api/getUserTransaction/", {
+          params: { username: dummyUsername },
+        })
+        .then((res) => {
+          const newTransactionList = res.data.map((item: PaymentDetail) => ({
+            ...item,
+            date: new Date(item.date),
+          }));
+          setTransactionList(newTransactionList);
+        })
+        .catch((err) => console.log(err));
+    }
   }, []);
 
   // FUNCTION

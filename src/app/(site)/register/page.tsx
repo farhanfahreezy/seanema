@@ -3,24 +3,31 @@
 import axios from "axios";
 import Link from "next/link";
 import React, { ChangeEvent, FormEventHandler, useState } from "react";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  // CONST
   const [data, setData] = useState({
     name: "",
     username: "",
     birthday: new Date(),
     password: "",
   });
-  const [errMsg, setErrMsg] = useState("");
+  const router = useRouter();
 
+  // FUNCTION
   const submitRegistration: FormEventHandler<HTMLFormElement> = async (
     event
   ) => {
     event.preventDefault();
     axios
       .post("/api/register", data)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then(() => {
+        toast.success("User has been registered!");
+        router.push("/login");
+      })
+      .catch((err) => toast.error(err.response.data.message));
   };
 
   return (
@@ -134,7 +141,6 @@ export default function Home() {
           </div>
 
           <div>
-            <div className="h-[16px]">{errMsg}</div>
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-primaryYellow px-3 py-1.5 text-sm font-medium leading-6 text-white shadow-sm hover:scale-[1.02] focus:scale-[0.98] transition-all"

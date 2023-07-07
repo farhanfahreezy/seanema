@@ -1,37 +1,47 @@
 "use client";
 
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 
-// interface UserSession {
-//   name: string;
-//   username: string;
-//   birthday: Date;
-//   balance: string;
-// }
-
-// interface NavbarProps {
-//   user: UserSession | null;
-// }
+interface Path {
+  label: string;
+  path: string;
+}
 
 const Navbar = () => {
+  // CONST
   const [isScrolled, setIsScrolled] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [navbarOption, setNavbarOption] = useState<Path[]>([
+    { label: "Home", path: "/" },
+  ]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const session = useSession();
 
   useEffect(() => {
-    const handleScroll = () => {
-      const isComponentScrolled = window.scrollY > 25;
+    if (session?.status === "authenticated") {
+      setNavbarOption([
+        { label: "Home", path: "/" },
+        { label: "Transaction", path: "/transaction" },
+        { label: "Account", path: "/account" },
+        { label: "Balance", path: "/balance" },
+      ]);
+      setIsLoggedIn(true);
+    }
+    // const handleScroll = () => {
+    //   const isComponentScrolled = window.scrollY > 25;
 
-      setIsScrolled(isComponentScrolled);
-    };
+    //   setIsScrolled(isComponentScrolled);
+    // };
 
-    window.addEventListener("scroll", handleScroll);
+    // window.addEventListener("scroll", handleScroll);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    // return () => {
+    //   window.removeEventListener("scroll", handleScroll);
+    // };
   }, []);
 
   return (
@@ -43,28 +53,39 @@ const Navbar = () => {
             : "px-[20px] sm:px-[40px] lg:px-[50px] bg-transparent"
         }`}
       >
-        <Image
-          src={"/seanema-short.svg"}
-          alt="seanema"
-          width={0}
-          height={0}
-          sizes="100vw"
-          className={`${
-            isScrolled ? "h-[30px] sm:h-[45px]" : "h-[40px] sm:h-[60px]"
-          } w-auto transition-all`}
-        />
+        <Link href="/">
+          <Image
+            src={"/seanema-short.svg"}
+            alt="seanema"
+            width={0}
+            height={0}
+            sizes="100vw"
+            className={`${
+              isScrolled ? "h-[30px] sm:h-[45px]" : "h-[40px] sm:h-[60px]"
+            } w-auto transition-all`}
+          />
+        </Link>
         <div className="hidden lg:flex flex-row items-center gap-[50px]">
           <div className="flex flex-row items-center gap-[40px] text-[16px] font-medium">
-            <Link href="/">Home</Link>
-            <Link href="/transaction">Transaction</Link>
-            <Link href="/account">Account</Link>
-            <Link href="/balance">Balance</Link>
+            {navbarOption.map((path) => (
+              <Link href={path.path} key={path.label}>
+                {path.label}
+              </Link>
+            ))}
           </div>
           <Link
-            href={"/login"}
-            className="w-[150px] bg-gradient-to-br from-primaryYellow to-secondaryYellow py-2 rounded-3xl text-center font-medium text-white text-[20px]"
+            href={isLoggedIn ? "/" : "/login"}
+            className={`w-[150px] ${
+              isLoggedIn ? "bg-transparent" : "bg-gradient-to-br"
+            } from-primaryYellow to-secondaryYellow border-2 py-2 rounded-3xl text-center font-medium text-white text-[20px] hover:scale-[1.01] active:scale-[0.98] transition-all`}
+            onClick={() => {
+              if (isLoggedIn) {
+                signOut();
+                setIsLoggedIn(false);
+              }
+            }}
           >
-            Login
+            {isLoggedIn ? "Logout" : "Login"}
           </Link>
         </div>
         <div className="flex lg:hidden flex-col items-center justify-center">
@@ -87,16 +108,25 @@ const Navbar = () => {
         }`}
       >
         <Link
-          href={"/login"}
-          className="w-[200px] bg-gradient-to-br from-primaryYellow to-secondaryYellow py-2 rounded-3xl text-center font-medium text-white text-[20px]"
+          href={isLoggedIn ? "/" : "/login"}
+          className={`w-[150px] ${
+            isLoggedIn ? "bg-transparent" : "bg-gradient-to-br"
+          } from-primaryYellow to-secondaryYellow border-2 py-2 rounded-3xl text-center font-medium text-white text-[20px] hover:scale-[1.01] active:scale-[0.98] transition-all`}
+          onClick={() => {
+            if (isLoggedIn) {
+              signOut();
+              setIsLoggedIn(false);
+            }
+          }}
         >
-          Login
+          {isLoggedIn ? "Logout" : "Login"}
         </Link>
         <div className="flex flex-col items-center gap-[40px] text-[16px] font-medium">
-          <Link href="/">Home</Link>
-          <Link href="/transaction">Transaction</Link>
-          <Link href="/account">Account</Link>
-          <Link href="/balance">Balance</Link>
+          {navbarOption.map((path) => (
+            <Link href={path.path} key={path.label}>
+              {path.label}
+            </Link>
+          ))}
         </div>
       </div>
       {openModal && (

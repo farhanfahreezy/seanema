@@ -13,11 +13,17 @@ export async function PATCH(request: NextRequest) {
   });
 
   if (!userDb) {
-    throw new Error("No username found");
+    return NextResponse.json(
+      { message: "Username not found" },
+      { status: 400 }
+    );
   }
 
   if (userDb.balance < parseInt(newBalance)) {
-    throw new Error("Your balance is not enough");
+    return NextResponse.json(
+      { message: "Your balance is not enough" },
+      { status: 400 }
+    );
   }
 
   const decrement = await prisma.user.update({

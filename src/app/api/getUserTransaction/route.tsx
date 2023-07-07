@@ -11,7 +11,10 @@ export async function GET(request: NextRequest) {
     },
   });
   if (!userDb) {
-    throw new Error("Username not found");
+    return NextResponse.json(
+      { message: "Username not found" },
+      { status: 400 }
+    );
   }
 
   const transactionHistory = await prisma.transaction.findMany({

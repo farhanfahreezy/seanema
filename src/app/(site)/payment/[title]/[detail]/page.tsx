@@ -2,6 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -49,6 +50,14 @@ const Page: FC<pageProps> = ({ params }) => {
   const [movie, setMovie] = useState<MovieDetail | null | 0>(0);
   const [userDetail, setUserDetail] = useState<UserDetail | null>(null);
   const router = useRouter();
+  const session = useSession();
+
+  // HOOKS
+  useEffect(() => {
+    if (session?.status !== "authenticated") {
+      router.push("/login");
+    }
+  }, []);
 
   // FUNCTION
   const getMovieByTitle = async (

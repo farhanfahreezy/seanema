@@ -19,7 +19,7 @@ export default async function Home() {
       {/* PAGE CONTENT */}
       <div className="flex flex-col pt-[150px] w-full max-w-[1000px] px-8 lg:px-10 py-10 gap-5 text-medium">
         <div>Server Side Render</div>
-        <div>{JSON.stringify(user)}</div>
+        <div>{JSON.stringify(session)}</div>
         <div>Client Side Render</div>
       </div>
     </div>

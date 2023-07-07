@@ -4,8 +4,10 @@ import Dropdown from "@/components/Dropdown";
 import Navbar from "@/components/Navbar";
 import SeatPicker from "@/components/SeatPicker";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, FC, useEffect, useState } from "react";
 
 interface pageProps {
@@ -39,8 +41,16 @@ const Page: FC<pageProps> = ({ params }) => {
   const [time, setTime] = useState("11:00");
   const [selectedSeat, setSelectedSeat] = useState<number[]>([]);
   const [seatArray, setSeatArray] = useState<SeatProps[] | null | 0>(0);
+  const router = useRouter();
+  const session = useSession();
 
   // HOOKS
+  useEffect(() => {
+    if (session?.status !== "authenticated") {
+      router.push("/login");
+    }
+  }, []);
+
   useEffect(() => {
     // Decode string uri-nya
     const newTitle = decodeURIComponent(params.title);

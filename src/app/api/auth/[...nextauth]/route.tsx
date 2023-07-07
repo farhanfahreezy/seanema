@@ -56,47 +56,47 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
   debug: process.env.NODE_ENV === "development",
-  callbacks: {
-    jwt: async ({ token, user }) => {
-      if (user && user.id) {
-        console.log("User JWT ", user);
-        token.uid = user.id as string; // Assign user's id to token
+  // callbacks: {
+  //   jwt: async ({ token, user }) => {
+  //     if (user && user.id) {
+  //       console.log("User JWT ", user);
+  //       token.uid = user.id as string; // Assign user's id to token
 
-        // Get user's role
-        const userData = await prisma.user.findUnique({
-          where: {
-            id: user.id,
-          },
-        });
+  //       // Get user's role
+  //       const userData = await prisma.user.findUnique({
+  //         where: {
+  //           id: user.id,
+  //         },
+  //       });
 
-        if (userData) {
-          token.role = "USER"; // Assign role to token
-        }
-      }
+  //       if (userData) {
+  //         token.role = "USER"; // Assign role to token
+  //       }
+  //     }
 
-      return token;
-    },
-    session: async ({ session, token }) => {
-      // Get user's data
-      const userData = await prisma.user.findUnique({
-        where: {
-          id: token.uid as string,
-        },
-        select: {
-          name: true,
-          username: true,
-          birthday: true,
-          balance: true,
-        },
-      });
+  //     return token;
+  //   },
+  //   session: async ({ session, token }) => {
+  //     // Get user's data
+  //     const userData = await prisma.user.findUnique({
+  //       where: {
+  //         id: token.uid as string,
+  //       },
+  //       select: {
+  //         name: true,
+  //         username: true,
+  //         birthday: true,
+  //         balance: true,
+  //       },
+  //     });
 
-      if (token?.uid && userData) {
-        // Check if token exists and has uid property
-        session.user = userData;
-      }
-      return session;
-    },
-  },
+  //     if (token?.uid && userData) {
+  //       // Check if token exists and has uid property
+  //       session.user = userData;
+  //     }
+  //     return session;
+  //   },
+  // },
 };
 
 const handler = NextAuth(authOptions);

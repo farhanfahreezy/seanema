@@ -1,23 +1,43 @@
 "use client";
 
 import Link from "next/link";
-import React, { ChangeEvent, FormEventHandler, useState } from "react";
-import { signIn } from "next-auth/react";
+import React, {
+  ChangeEvent,
+  FormEventHandler,
+  useEffect,
+  useState,
+} from "react";
+import { signIn, useSession } from "next-auth/react";
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  // CONST
   const [data, setData] = useState({
     username: "",
     password: "",
   });
-  const [errMsg, setErrMsg] = useState("");
+  const router = useRouter();
+  const session = useSession();
 
+  // HOOKS
+  useEffect(() => {
+    if (session?.status === "authenticated") {
+      router.push("/");
+    }
+  }, []);
+
+  // FUNCTION
   const submitLogin: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    signIn("credentials", { ...data, redirect: false })
-      .then(() => {
-        alert("logged");
-      })
-      .catch((err) => console.log(err));
+    signIn("credentials", { ...data, redirect: false }).then((callback) => {
+      if (callback?.error) {
+        toast.error(callback.error);
+      } else {
+        toast.success("Logged in");
+        router.push("/");
+      }
+    });
   };
   return (
     <div className="flex min-h-screen flex-col justify-center items-center px-2 lg:px-8">
@@ -79,8 +99,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="pt-4">
-            <div className="h-[16px]">{errMsg}</div>
+          <div>
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-primaryYellow px-3 py-1.5 text-sm font-medium leading-6 text-white shadow-sm hover:scale-[1.02] focus:scale-[0.98] transition-all"

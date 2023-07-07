@@ -2,6 +2,8 @@
 
 import Navbar from "@/components/Navbar";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 
 interface UserDetail {
@@ -22,6 +24,15 @@ export default function Home() {
   const [userDetail, setUserDetail] = useState<UserDetail | null>(null);
   const [isWithdraw, setIsWithdraw] = useState(false);
   const [errMsg, setErrMsg] = useState("");
+  const router = useRouter();
+  const session = useSession();
+
+  // HOOKS
+  useEffect(() => {
+    if (session?.status !== "authenticated") {
+      router.push("/login");
+    }
+  }, []);
 
   // FUNCTION
   const formatter = new Intl.NumberFormat("en-US", {

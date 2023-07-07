@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const time = body.searchParams.get("time");
 
   if (!dateWithTime || !time) {
-    throw new Error("Missing Fields");
+    return NextResponse.json({ message: "Missing fields" }, { status: 400 });
   }
 
   // Removing time from date and adjust with db time
