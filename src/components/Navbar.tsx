@@ -39,7 +39,7 @@ const Navbar = () => {
         className={`z-[10] fixed top-0 flex flex-row w-full justify-between items-center transition-all py-[20px] ${
           isScrolled
             ? "px-[30px] sm:px-[50px] lg:px-[80px] bg-gradient-to-t from-primaryBg to-secondaryBg"
-            : "px-[20px] sm:px-[40px] lg:px-[50px] bg-secondaryBg shadow-xl"
+            : "px-[20px] sm:px-[40px] lg:px-[50px] bg-transparent"
         }`}
       >
         <img

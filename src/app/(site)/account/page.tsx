@@ -91,7 +91,7 @@ export default function Home() {
                     </dt>
                     <dd className="flex flex-row items-center justify-start mt-1 text-sm leading-6 text-slate-300 sm:col-span-2 sm:mt-0 gap-2">
                       <div>{formatter.format(userDetail.balance)} </div>
-                      <Link href={"/topup"}>
+                      <Link href={"/balance"}>
                         <button className="px-3 rounded-md border-2 border-slate-600 hover:bg-slate-600 text-[12px] transition-all">
                           Top Up
                         </button>
