@@ -5,21 +5,25 @@ import { BsCalendar4Week, BsClock } from "react-icons/bs";
 import { MdChair, MdOutlinePriceChange } from "react-icons/md";
 
 interface PaymentDetail {
+  id: string;
   title: string;
   price: number;
   total: number;
   date: Date;
   time: string;
   tickets: number[];
+  onRefundClick: (id: string) => void;
 }
 
 const TransactionPreview = ({
+  id,
   title,
   price,
   total,
   date,
   time,
   tickets,
+  onRefundClick,
 }: PaymentDetail) => {
   // CONST
   const [isDelete, setIsDelete] = useState(false);
@@ -75,7 +79,7 @@ const TransactionPreview = ({
               </button>
               <button
                 className="py-1 px-6 w-[80px] border-[1px] rounded-lg border-secondaryBg hover:border-white bg-green-400 md:bg-primaryBg hover:bg-green-400 hover:scale-105 active:scale-95 transition-all"
-                onClick={() => console.log("delete")}
+                onClick={() => onRefundClick(id)}
               >
                 Yes
               </button>

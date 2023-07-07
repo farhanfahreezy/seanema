@@ -5,6 +5,7 @@ import MovieList from "@/components/MovieList";
 import Navbar from "@/components/Navbar";
 import { useEffect, useState } from "react";
 import UserFetcher from "@/components/UserFetcher";
+import Youtube, { YouTubeProps } from "react-youtube";
 
 interface MovieCardProps {
   title: string;
@@ -13,8 +14,20 @@ interface MovieCardProps {
 }
 
 export default function Home() {
+  // CONST
   const [movieList, setMovieList] = useState<MovieCardProps[]>();
+  const [screenWidth, setScreenWidth] = useState(0);
 
+  const opts: YouTubeProps["opts"] = {
+    height:
+      screenWidth > 1200 ? "800px" : screenWidth > 600 ? "400px" : "200px",
+    width: "100%",
+    playerVars: {
+      autoplay: 1,
+    },
+  };
+
+  // FUNCTION
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,6 +50,23 @@ export default function Home() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    // Set initial screen width
+    setScreenWidth(window.innerWidth);
+
+    // Add event listener to update screen width on resize
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div className="relative flex flex-col justify-start items-start w-full min-h-screen overflow-x-hidden">
       <Navbar />
@@ -53,6 +83,9 @@ export default function Home() {
         </div>
         <div>
           <div className="text-[30px] font-bold">Featured</div>
+        </div>
+        <div className="w-full h-fit rounded-xl overflow-hidden">
+          <Youtube videoId="uYPbbksJxIg" opts={opts} />
         </div>
       </div>
     </div>

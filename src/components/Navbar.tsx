@@ -54,7 +54,7 @@ const Navbar = () => {
             <Link href="/">Home</Link>
             <Link href="/transaction">Transaction</Link>
             <Link href="/account">Account</Link>
-            <Link href="/topup">Topup</Link>
+            <Link href="/balance">Balance</Link>
           </div>
           <Link
             href={"/login"}
@@ -92,7 +92,7 @@ const Navbar = () => {
           <Link href="/">Home</Link>
           <Link href="/transaction">Transaction</Link>
           <Link href="/account">Account</Link>
-          <Link href="/topup">Topup</Link>
+          <Link href="/balance">Balance</Link>
         </div>
       </div>
       {openModal && (

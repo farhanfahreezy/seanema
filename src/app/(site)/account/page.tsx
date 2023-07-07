@@ -44,8 +44,8 @@ export default function Home() {
     <div className="relative flex flex-col justify-center items-center w-full min-h-screen overflow-x-hidden">
       <Navbar />
       {/* PAGE CONTENT */}
-      <div className="flex flex-col pt-[150px] w-full max-w-[1000px] px-8 lg:px-10 py-10 gap-5 text-medium">
-        {userDetail ? (
+      {userDetail ? (
+        <div className="flex flex-col pt-[150px] w-full max-w-[1000px] px-8 lg:px-10 py-10 gap-5 text-medium items-center justify-center">
           <div className="flex flex-col w-full rounded-xl py-4 px-6 shadow-2xl">
             <div className="text-[24px] pb-2 pl-2">
               Welcome Back, {userDetail.name}
@@ -102,10 +102,10 @@ export default function Home() {
               </div>
             </div>
           </div>
-        ) : (
-          <div>Loading...</div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div>Loading...</div>
+      )}
     </div>
   );
 }

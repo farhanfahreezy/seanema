@@ -11,17 +11,19 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  username       String   @unique
+  username       String        @unique
   hashedPassword String
   balance        Int
   birthday       DateTime
-  createdAt      DateTime @default(now())
+  createdAt      DateTime      @default(now())
+  transaction    Transaction[]
 }
 
 model Transaction {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  username  String
   title     String
   price     Int
   total     Int
@@ -29,4 +31,5 @@ model Transaction {
   time      String
   tickets   Int[]
   createdAt DateTime @default(now())
+  user      User     @relation(fields: [username], references: [username])
 }

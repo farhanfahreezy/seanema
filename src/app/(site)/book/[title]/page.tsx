@@ -28,42 +28,71 @@ interface SeatProps {
   handleClick: (id: number) => void;
 }
 
-// Karna id dari API comfest itu banyak yang duplikat, nyari movienya pake title
-const getMovieByTitle = async (title: string): Promise<MovieDetail | null> => {
-  try {
-    const response = await axios.get(
-      "https://seleksi-sea-2023.vercel.app/api/movies"
-    );
-    const movies: MovieDetail[] = response.data;
-    const movie = movies.find((movie) => movie.title === title);
-    return movie || null;
-  } catch (error) {
-    console.error("Error fetching movie data:", error);
-    return null;
-  }
-};
-
-function formatDate(date: Date) {
-  const day = date.getDate().toString().padStart(2, "0"); // Get the day and pad with leading zero if necessary
-  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Get the month (Note: month is zero-based) and pad with leading zero if necessary
-  const year = date.getFullYear().toString(); // Get the full year
-
-  return `${day}-${month}-${year}`;
-}
+// DUMMY DATA
+const username = "notspidey";
+// END OF DUMMY
 
 const page: FC<pageProps> = ({ params }) => {
+  // CONST
   const [movie, setMovie] = useState<MovieDetail | null | 0>(0);
   const [date, setDate] = useState<Date>(new Date());
   const [time, setTime] = useState("11:00");
   const [selectedSeat, setSelectedSeat] = useState<number[]>([]);
+  const [seatArray, setSeatArray] = useState<SeatProps[] | null | 0>(0);
 
+  // HOOKS
   useEffect(() => {
     // Decode string uri-nya
     const newTitle = decodeURIComponent(params.title);
-    getMovieByTitle(newTitle).then((movie) => {
-      setMovie(movie);
+    getMovieByTitle(newTitle).then((movies) => {
+      setMovie(movies);
     });
   }, []);
+
+  // FUNCTION
+  const getMovieByTitle = async (
+    title: string
+  ): Promise<MovieDetail | null> => {
+    // Karna id dari API comfest itu banyak yang duplikat, nyari movienya pake title
+    try {
+      const response = await axios.get(
+        "https://seleksi-sea-2023.vercel.app/api/movies"
+      );
+      const movies: MovieDetail[] = response.data;
+      const movie = movies.find((moviess) => moviess.title === title);
+      return movie || null;
+    } catch (error) {
+      console.error("Error fetching movie data:", error);
+      return null;
+    }
+  };
+
+  const getSeatList = async () => {
+    setSelectedSeat([]);
+    setSeatArray(null);
+    if (movie) {
+      axios
+        .get("/api/getBookedSeat/", {
+          params: { title: movie.title, date, time },
+        })
+        .then((res) => {
+          const bookedSeat: number[] = [];
+          res.data.map((data: any) =>
+            data.tickets.map((num: number) => bookedSeat.push(num))
+          );
+          const newSeats: SeatProps[] = [];
+          for (let i = 1; i <= 64; i++) {
+            const seat: SeatProps = {
+              id: i,
+              isBooked: bookedSeat.includes(i),
+              handleClick: handleSeatClick,
+            };
+            newSeats.push(seat);
+          }
+          setSeatArray(newSeats);
+        });
+    }
+  };
 
   const handleDropdown = (opt: string) => {
     setTime(opt);
@@ -81,23 +110,17 @@ const page: FC<pageProps> = ({ params }) => {
     }
   };
 
-  // DUMMMY
-  const seats: SeatProps[] = [];
-  for (let i = 1; i <= 64; i++) {
-    const seat: SeatProps = {
-      id: i,
-      isBooked: false,
-      handleClick: handleSeatClick,
-    };
+  function formatDate(date: Date) {
+    const day = date.getDate().toString().padStart(2, "0"); // Get the day and pad with leading zero if necessary
+    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Get the month (Note: month is zero-based) and pad with leading zero if necessary
+    const year = date.getFullYear().toString(); // Get the full year
 
-    seats.push(seat);
+    return `${day}-${month}-${year}`;
   }
-  seats[2].isBooked = true;
-  seats[3].isBooked = true;
-  seats[4].isBooked = true;
-  seats[10].isBooked = true;
-  seats[24].isBooked = true;
-  // END OF DUMMY
+
+  useEffect(() => {
+    console.log(selectedSeat);
+  }, [selectedSeat]);
 
   return (
     <div className="relative flex flex-col justify-center items-center w-full min-h-screen overflow-x-hidden py-[150px]">
@@ -167,7 +190,10 @@ const page: FC<pageProps> = ({ params }) => {
                       handleClick={handleDropdown}
                     />
                   </div>
-                  <button className="w-full py-2 bg-gradient-to-br from-primaryYellow to-secondaryYellow rounded-lg">
+                  <button
+                    className="w-full py-2 bg-gradient-to-br from-primaryYellow to-secondaryYellow rounded-lg"
+                    onClick={getSeatList}
+                  >
                     Search Ticket
                   </button>
                 </div>
@@ -176,26 +202,36 @@ const page: FC<pageProps> = ({ params }) => {
 
             {/* SEAT SELECTION CONTENT */}
             <div className="flex flex-col w-full lg:w-[60%] items-center justify-center gap-5">
-              <SeatPicker seats={seats} />
-              {seats && (selectedSeat.length > 6 || selectedSeat.length < 1) ? (
-                <button className="text-[36px] py-2 px-12 font-medium rounded-xl bg-transparent hover:bg-gradient-to-br from-primaryYellow to-secondaryYellow transition-all border-2 border-primaryYellow hover:border-white hover:scale-105 active:scale-95">
-                  Book Ticket
-                </button>
+              {seatArray === 0 ? (
+                <div>Please select time and date</div>
+              ) : seatArray ? (
+                <SeatPicker seats={seatArray} />
               ) : (
-                <Link
-                  href={
-                    "/payment/" +
-                    movie.title +
-                    "/" +
-                    formatDate(date) +
-                    time +
-                    selectedSeat.toString()
-                  }
-                >
+                <div>Loading...</div>
+              )}
+              {seatArray !== 0 && seatArray !== null ? (
+                selectedSeat.length > 6 || selectedSeat.length < 1 ? (
                   <button className="text-[36px] py-2 px-12 font-medium rounded-xl bg-transparent hover:bg-gradient-to-br from-primaryYellow to-secondaryYellow transition-all border-2 border-primaryYellow hover:border-white hover:scale-105 active:scale-95">
-                    Book Ticket
+                    Please Select 1-6 Seat
                   </button>
-                </Link>
+                ) : (
+                  <Link
+                    href={
+                      "/payment/" +
+                      movie.title +
+                      "/" +
+                      formatDate(date) +
+                      time +
+                      selectedSeat.toString()
+                    }
+                  >
+                    <button className="text-[36px] py-2 px-12 font-medium rounded-xl bg-transparent hover:bg-gradient-to-br from-primaryYellow to-secondaryYellow transition-all border-2 border-primaryYellow hover:border-white hover:scale-105 active:scale-95">
+                      Book Ticket
+                    </button>
+                  </Link>
+                )
+              ) : (
+                <div></div>
               )}
             </div>
           </div>

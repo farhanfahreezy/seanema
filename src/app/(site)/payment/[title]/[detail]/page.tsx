@@ -1,9 +1,9 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import UserFetcher from "@/components/UserFetcher";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 
 interface pageProps {
@@ -29,16 +29,31 @@ interface MovieDetail {
   ticket_price: number;
 }
 
+interface UserDetail {
+  name: string;
+  username: string;
+  balance: number;
+  birthday: Date;
+}
+
+// DUMMY
+const dummyUsername = "notspidey";
+// END OF DUMMY
+
 const page: FC<pageProps> = ({ params }) => {
+  // CONST
   const [paymentDetail, setPaymentDetail] = useState<PaymentDetail | null>(
     null
   );
   const [movie, setMovie] = useState<MovieDetail | null | 0>(0);
+  const [userDetail, setUserDetail] = useState<UserDetail | null>(null);
+  const router = useRouter();
 
-  // Karna id dari API comfest itu banyak yang duplikat, nyari movienya pake title
+  // FUNCTION
   const getMovieByTitle = async (
     title: string
   ): Promise<MovieDetail | null> => {
+    // Karna id dari API comfest itu banyak yang duplikat, nyari movienya pake title
     try {
       const response = await axios.get(
         "https://seleksi-sea-2023.vercel.app/api/movies"
@@ -62,7 +77,7 @@ const page: FC<pageProps> = ({ params }) => {
     const integerPart = dateString.substring(15);
 
     const dateObject = new Date(dateArray.join("/"));
-    const integerArray = integerPart.split(",").map(Number); // Split the integer part and convert to an array of integers
+    const integerArray = integerPart.split(",").map(Number);
 
     return {
       date: dateObject,
@@ -74,6 +89,17 @@ const page: FC<pageProps> = ({ params }) => {
     style: "currency",
     currency: "IDR",
   });
+
+  const onPaymentClick = () => {
+    const data = { ...paymentDetail, username: userDetail?.username };
+    axios
+      .post("/api/payment/", data)
+      .then((res) => {
+        router.push("/transaction/");
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
     const title = decodeURIComponent(params.title);
@@ -88,11 +114,17 @@ const page: FC<pageProps> = ({ params }) => {
       const total = price! * tickets.length;
       setPaymentDetail({ title, price: price!, total, date, time, tickets });
     });
+    axios
+      .get("/api/getUser/", { params: { username: dummyUsername } })
+      .then((res) => {
+        const newUserDetail = {
+          ...res.data,
+          birthday: new Date(res.data.birthday),
+        };
+        setUserDetail(newUserDetail);
+      })
+      .catch((err) => console.log(err));
   }, []);
-
-  //   DUMMY
-  const userBalance = 690000;
-  // END OF DUMMY
 
   return (
     <div className="relative flex flex-col justify-center items-center w-full min-h-screen overflow-x-hidden py-[150px]">
@@ -165,15 +197,18 @@ const page: FC<pageProps> = ({ params }) => {
               <div className="flex flex-row justify-between w-full items-center pb-5">
                 <div>Your Balance</div>
                 <div className="bg-secondaryBg py-2 px-4 lg:px-6 rounded-xl text-white text-[12px] lg:text-[24px] w-[280px] text-right">
-                  {formatter.format(userBalance)}
+                  {userDetail
+                    ? formatter.format(userDetail.balance)
+                    : "Loading"}
                 </div>
               </div>
-              {userBalance >= paymentDetail.total ? (
-                <Link href={"/transaction"} className="w-full">
-                  <button className="bg-white py-3 px-12  w-full rounded-xl hover:scale-[1.01] active:scale-[1] transition-all border-2 lg:border-3 border-primaryYellow">
-                    Confirm Payment
-                  </button>
-                </Link>
+              {userDetail?.balance! >= paymentDetail.total ? (
+                <button
+                  className="bg-white py-3 px-12  w-full rounded-xl hover:scale-[1.01] active:scale-[1] transition-all border-2 lg:border-3 border-primaryYellow"
+                  onClick={onPaymentClick}
+                >
+                  Confirm Payment
+                </button>
               ) : (
                 <Link href={"/topup"} className="w-full">
                   <button className="bg-white py-3 px-12  w-full rounded-xl border-2 lg:border-3 border-red-400 text-red-400">
