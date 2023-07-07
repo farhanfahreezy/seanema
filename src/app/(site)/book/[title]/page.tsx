@@ -3,6 +3,7 @@
 import Dropdown from "@/components/Dropdown";
 import Navbar from "@/components/Navbar";
 import SeatPicker from "@/components/SeatPicker";
+import UserFetcher from "@/components/UserFetcher";
 import axios from "axios";
 import Link from "next/link";
 import { ChangeEvent, FC, useEffect, useState } from "react";

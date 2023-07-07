@@ -1,20 +1,26 @@
 "use client";
 
+import axios from "axios";
+import Link from "next/link";
 import React, { ChangeEvent, FormEventHandler, useState } from "react";
 
 export default function Home() {
   const [data, setData] = useState({
     name: "",
     username: "",
-    date: new Date(),
+    birthday: new Date(),
     password: "",
   });
+  const [errMsg, setErrMsg] = useState("");
 
   const submitRegistration: FormEventHandler<HTMLFormElement> = async (
     event
   ) => {
     event.preventDefault();
-    console.log(data);
+    axios
+      .post("/api/register", data)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -92,9 +98,9 @@ export default function Home() {
                 type="date"
                 autoComplete="date"
                 required
-                value={data.date.toISOString().split("T")[0]}
+                value={data.birthday.toISOString().split("T")[0]}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  setData({ ...data, date: new Date(e.target.value) });
+                  setData({ ...data, birthday: new Date(e.target.value) });
                 }}
                 className="block w-full rounded-md border-0 py-1.5 shadow-sm text-black placeholder:text-secondayGray placeholder:opacity-[50%] sm:text-sm sm:leading-6"
               />
@@ -128,12 +134,18 @@ export default function Home() {
           </div>
 
           <div>
+            <div className="h-[16px]">{errMsg}</div>
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-primaryYellow px-3 py-1.5 text-sm font-medium leading-6 text-white shadow-sm hover:scale-[1.02] focus:scale-[0.98] transition-all"
             >
               Register
             </button>
+            <Link href={"/login"} className="flex justify-center w-full">
+              <p className="pt-2 text-sm text-primaryYellow opacity-[70%] hover:opacity-[100%] transition-all">
+                already have an account?
+              </p>
+            </Link>
           </div>
         </form>
       </div>

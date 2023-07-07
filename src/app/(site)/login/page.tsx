@@ -1,18 +1,23 @@
 "use client";
 
-import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import React, { ChangeEvent, FormEventHandler, useState } from "react";
+import { signIn } from "next-auth/react";
 
 export default function Home() {
   const [data, setData] = useState({
     username: "",
     password: "",
   });
+  const [errMsg, setErrMsg] = useState("");
 
   const submitLogin: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-    console.log(data);
+    signIn("credentials", { ...data, redirect: false })
+      .then(() => {
+        alert("logged");
+      })
+      .catch((err) => console.log(err));
   };
   return (
     <div className="flex min-h-screen flex-col justify-center items-center px-2 lg:px-8">
@@ -75,6 +80,7 @@ export default function Home() {
           </div>
 
           <div className="pt-4">
+            <div className="h-[16px]">{errMsg}</div>
             <button
               type="submit"
               className="flex w-full justify-center rounded-md bg-primaryYellow px-3 py-1.5 text-sm font-medium leading-6 text-white shadow-sm hover:scale-[1.02] focus:scale-[0.98] transition-all"

@@ -10,4 +10,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  username       String   @unique
+  hashedPassword String
+  balance        Int
+  birthday       DateTime
+  createdAt      DateTime @default(now())
+}
 
+model Transaction {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  price     Int
+  total     Int
+  date      DateTime
+  time      String
+  tickets   Int[]
+  createdAt DateTime @default(now())
+}

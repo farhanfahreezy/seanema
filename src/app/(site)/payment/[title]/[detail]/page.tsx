@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
+import UserFetcher from "@/components/UserFetcher";
 import axios from "axios";
 import Link from "next/link";
 import { FC, useEffect, useState } from "react";

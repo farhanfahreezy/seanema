@@ -4,6 +4,17 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 
+// interface UserSession {
+//   name: string;
+//   username: string;
+//   birthday: Date;
+//   balance: string;
+// }
+
+// interface NavbarProps {
+//   user: UserSession | null;
+// }
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [openModal, setOpenModal] = useState(false);

@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
+import Provider from "./context/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`bg-primaryBg text-white ${inter.className}`}>
-        {children}
+        <Provider>{children}</Provider>
       </body>
     </html>
   );

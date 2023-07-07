@@ -1,8 +1,11 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
+import UserFetcher from "@/components/UserFetcher";
+import { data } from "autoprefixer";
+import axios from "axios";
 import Link from "next/link";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 interface UserDetail {
   name: string;
@@ -11,20 +14,14 @@ interface UserDetail {
   birthday: Date;
 }
 
-// DUMMY DATA
+// DUMMY
+const dummyUsername = "notspidey";
+// END OF DUMMY
 
-const dummyPayment2: UserDetail = {
-  name: "Miles Morales",
-  username: "notspidey",
-  balance: 690000,
-  birthday: new Date(),
-};
-
-// END OF DUMMY DATA
 export default function Home() {
   // CONST
   const [topupValue, setTopupValue] = useState(0);
-  const userDetail: UserDetail = { ...dummyPayment2 };
+  const [userDetail, setUserDetail] = useState<UserDetail | null>(null);
 
   // FUNCTION
   const formatter = new Intl.NumberFormat("en-US", {
@@ -32,9 +29,29 @@ export default function Home() {
     currency: "IDR",
   });
 
+  useEffect(() => {
+    axios
+      .get("/api/getUser/", { params: { username: dummyUsername } })
+      .then((res) => {
+        const newUserDetail = {
+          ...res.data,
+          birthday: new Date(res.data.birthday),
+        };
+        setUserDetail(newUserDetail);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   const submitTopup = (event: any) => {
     event.preventDefault();
     console.log(topupValue);
+    axios
+      .patch("/api/topup/", {
+        newBalance: topupValue,
+        username: userDetail?.username,
+      })
+      .then(() => console.log("Done"))
+      .catch((err) => console.log(err));
   };
   return (
     <div className="relative flex flex-col justify-center items-center w-full min-h-screen overflow-x-hidden">
