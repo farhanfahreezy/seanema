@@ -15,6 +15,18 @@ export async function GET(request: NextRequest) {
   const date = new Date(dateWithTime.substring(0, 10));
   date.setUTCHours(17);
 
+  const today = new Date();
+  const todayNoTime = new Date(today.toISOString().substring(0, 10));
+  todayNoTime.setUTCHours(17);
+
+  // If user trying to buy yesterday tickets
+  if (todayNoTime.getTime() > date.getTime()) {
+    return NextResponse.json(
+      { message: "You cant buy past ticket" },
+      { status: 400 }
+    );
+  }
+
   const transactionHistory = await prisma.transaction.findMany({
     where: {
       title: title!,

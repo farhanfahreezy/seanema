@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 interface pageProps {
   params: { title: string; detail: string };
@@ -38,7 +39,7 @@ interface UserDetail {
   birthday: Date;
 }
 
-const Page: FC<pageProps> = ({ params }) => {
+export default function Home({ params }: pageProps) {
   // CONST
   const [paymentDetail, setPaymentDetail] = useState<PaymentDetail | null>(
     null
@@ -102,10 +103,10 @@ const Page: FC<pageProps> = ({ params }) => {
     axios
       .post("/api/payment/", data)
       .then((res) => {
+        toast.success(res.data.message);
         router.push("/transaction/");
-        console.log(res);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => toast.error(err.response.data.message));
   };
 
   useEffect(() => {
@@ -236,6 +237,4 @@ const Page: FC<pageProps> = ({ params }) => {
       )}
     </div>
   );
-};
-
-export default Page;
+}

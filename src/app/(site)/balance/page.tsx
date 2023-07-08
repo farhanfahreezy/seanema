@@ -5,6 +5,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface UserDetail {
   name: string;
@@ -52,7 +53,7 @@ export default function Home() {
         };
         setUserDetail(newUserDetail);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => toast.error(err.response.data.message));
   }, [userSession?.username]);
 
   const submitTopup = (event: any) => {
@@ -66,8 +67,10 @@ export default function Home() {
           newBalance: value,
           username: userDetail?.username,
         })
-        .then(() => window.location.reload())
-        .catch((err) => console.log(err));
+        .then((res) => {
+          toast.success(res.data.message);
+        })
+        .catch((err) => toast.error(err.response.data.message));
     }
   };
 
@@ -84,8 +87,10 @@ export default function Home() {
           newBalance: value,
           username: userDetail?.username,
         })
-        .then(() => window.location.reload())
-        .catch((err) => console.log(err));
+        .then((res) => {
+          toast.success(res.data.message);
+        })
+        .catch((err) => toast.error(err.response.data.message));
     }
   };
   return (

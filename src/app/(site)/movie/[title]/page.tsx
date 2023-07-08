@@ -36,7 +36,7 @@ const getMovieByTitle = async (title: string): Promise<MovieDetail | null> => {
   }
 };
 
-const Page: FC<pageProps> = ({ params }) => {
+export default function Home({ params }: pageProps) {
   const [movie, setMovie] = useState<MovieDetail | null | 0>(0);
   const session = useSession();
 
@@ -130,6 +130,4 @@ const Page: FC<pageProps> = ({ params }) => {
       )}
     </div>
   );
-};
-
-export default Page;
+}

@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import SeatPicker from "@/components/SeatPicker";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { toast } from "react-hot-toast";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -27,7 +28,6 @@ interface MovieDetail {
 interface SeatProps {
   id: number;
   isBooked: boolean;
-  handleClick: (id: number) => void;
 }
 
 interface UserDetail {
@@ -37,14 +37,16 @@ interface UserDetail {
   birthday: Date;
 }
 
-const Page: FC<pageProps> = ({ params }) => {
+export default function Home({ params }: pageProps) {
   // CONST
   const [movie, setMovie] = useState<MovieDetail | null | 0>(0);
+  const [userDetail, setUserDetail] = useState<UserDetail | null>(null);
+  const [seatArray, setSeatArray] = useState<SeatProps[] | null | 0>(0);
+
   const [date, setDate] = useState<Date>(new Date());
   const [time, setTime] = useState("11:00");
   const [selectedSeat, setSelectedSeat] = useState<number[]>([]);
-  const [userDetail, setUserDetail] = useState<UserDetail | null>(null);
-  const [seatArray, setSeatArray] = useState<SeatProps[] | null | 0>(0);
+
   const router = useRouter();
   const session = useSession();
   const userSession = session.data?.user as UserDetail;
@@ -61,6 +63,10 @@ const Page: FC<pageProps> = ({ params }) => {
   }, [selectedSeat]);
 
   useEffect(() => {
+    console.log(seatArray);
+  }, [seatArray]);
+
+  useEffect(() => {
     // Decode string uri-nya
     const newTitle = decodeURIComponent(params.title);
     getMovieByTitle(newTitle).then((movies) => {
@@ -75,7 +81,7 @@ const Page: FC<pageProps> = ({ params }) => {
         };
         setUserDetail(newUserDetail);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log("test", err));
   }, [params.title, userSession?.username]);
 
   // FUNCTION
@@ -96,7 +102,7 @@ const Page: FC<pageProps> = ({ params }) => {
     }
   };
 
-  const getSeatList = async () => {
+  const getSeatList = () => {
     setSelectedSeat([]);
     setSeatArray(null);
     if (movie) {
@@ -114,11 +120,14 @@ const Page: FC<pageProps> = ({ params }) => {
             const seat: SeatProps = {
               id: i,
               isBooked: bookedSeat.includes(i),
-              handleClick: handleSeatClick,
             };
             newSeats.push(seat);
           }
           setSeatArray(newSeats);
+        })
+        .catch((err) => {
+          toast.error(err.response.data.message);
+          setSeatArray(0);
         });
     }
   };
@@ -134,9 +143,9 @@ const Page: FC<pageProps> = ({ params }) => {
       );
       setSelectedSeat(updatedSelectedSeat);
     } else {
-      const updatedSelectedSeat = selectedSeat.concat(id);
-      setSelectedSeat(updatedSelectedSeat);
+      setSelectedSeat([...selectedSeat, id]);
     }
+    console.log(selectedSeat);
   };
 
   function formatDate(date: Date) {
@@ -252,7 +261,7 @@ const Page: FC<pageProps> = ({ params }) => {
               {seatArray === 0 ? (
                 <div>Please select time and date</div>
               ) : seatArray ? (
-                <SeatPicker seats={seatArray} />
+                <SeatPicker seats={seatArray} handleClick={handleSeatClick} />
               ) : (
                 <div>Loading...</div>
               )}
@@ -273,7 +282,7 @@ const Page: FC<pageProps> = ({ params }) => {
                       "/" +
                       formatDate(date) +
                       time +
-                      selectedSeat.toString()
+                      selectedSeat.join(",")
                     }
                   >
                     <button className="text-[36px] py-2 px-12 font-medium rounded-xl bg-transparent hover:bg-gradient-to-br from-primaryYellow to-secondaryYellow transition-all border-2 border-primaryYellow hover:border-white hover:scale-105 active:scale-95">
@@ -294,6 +303,4 @@ const Page: FC<pageProps> = ({ params }) => {
       )}
     </div>
   );
-};
-
-export default Page;
+}

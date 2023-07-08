@@ -6,7 +6,7 @@ export async function POST(request: any) {
   const { id, username } = body;
 
   if (!id || !username) {
-    throw new NextResponse("Missing Fields", { status: 400 });
+    return NextResponse.json({ message: "Missing fields" }, { status: 400 });
   }
 
   const deletedTransaction = await prisma.transaction.delete({
@@ -21,5 +21,5 @@ export async function POST(request: any) {
     data: { balance: { increment: deletedTransaction.total } },
   });
 
-  return NextResponse.json(deletedTransaction);
+  return NextResponse.json({ message: "Refund successfull" }, { status: 200 });
 }

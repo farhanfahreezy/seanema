@@ -11,5 +11,5 @@ export async function PATCH(request: NextRequest) {
     data: { balance: { increment: parseInt(newBalance!) } },
   });
 
-  return NextResponse.json(userDb);
+  return NextResponse.json({ message: "Topup successfull" }, { status: 200 });
 }

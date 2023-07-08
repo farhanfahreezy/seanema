@@ -18,6 +18,7 @@ const MovieCard = ({ title, poster_url, age_rating }: MovieCardProps) => {
           width={0}
           height={0}
           sizes="100vw"
+          loading="lazy"
           className="w-full rounded-2xl shadow-xl hover:scale-[1.05] transition-all"
         />
       </Link>

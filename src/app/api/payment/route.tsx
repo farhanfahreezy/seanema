@@ -14,7 +14,7 @@ export async function POST(request: any) {
   });
 
   if (!userDb) {
-    throw new Error("No username found");
+    return NextResponse.json({ message: "No username found" }, { status: 400 });
   }
 
   const trans = await prisma.transaction.create({
@@ -36,5 +36,5 @@ export async function POST(request: any) {
     data: { balance: { decrement: trans.total } },
   });
 
-  return NextResponse.json(trans);
+  return NextResponse.json({ message: "Payment successfull" }, { status: 200 });
 }

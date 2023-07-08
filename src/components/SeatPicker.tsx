@@ -4,14 +4,14 @@ import Seat from "./Seat";
 interface SeatProps {
   id: number;
   isBooked: boolean;
-  handleClick: (id: number) => void;
 }
 
 interface SeatPickerProps {
-  seats?: SeatProps[];
+  seats: SeatProps[];
+  handleClick: (id: number) => void;
 }
 
-const SeatPicker = ({ seats }: SeatPickerProps) => {
+const SeatPicker = ({ seats, handleClick }: SeatPickerProps) => {
   return (
     <div className="w-fit flex flex-col justify-center items-center bg-primaryBg rounded-xl px-[30px] lg:px-[40px] py-[20px] shadow-2xl">
       {seats ? (
@@ -23,7 +23,14 @@ const SeatPicker = ({ seats }: SeatPickerProps) => {
           {/* SEATS */}
           <div className="grid grid-cols-8 gap-1 lg:gap-3">
             {seats.map((seat) => (
-              <Seat {...seat} key={seat.id} />
+              <button
+                onClick={() => {
+                  handleClick(seat.id);
+                }}
+                key={seat.id}
+              >
+                <Seat {...seat} />
+              </button>
             ))}
           </div>
 

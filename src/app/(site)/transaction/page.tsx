@@ -6,6 +6,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface PaymentDetail {
   id: string;
@@ -56,10 +57,11 @@ export default function Home() {
     const data = { id, username: userSession?.username };
     axios
       .post("/api/refund/", data)
-      .then(() => {
+      .then((res) => {
+        toast.success(res.data.message);
         window.location.reload();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => toast.error(err.response.data.message));
   };
 
   return (

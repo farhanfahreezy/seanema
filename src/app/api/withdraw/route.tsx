@@ -33,5 +33,8 @@ export async function PATCH(request: NextRequest) {
     data: { balance: { decrement: parseInt(newBalance) } },
   });
 
-  return NextResponse.json(decrement);
+  return NextResponse.json(
+    { message: "Withdraw successfull" },
+    { status: 200 }
+  );
 }
