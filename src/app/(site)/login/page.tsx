@@ -25,7 +25,7 @@ export default function Home() {
     if (session?.status === "authenticated") {
       router.push("/");
     }
-  }, []);
+  }, [session?.status, router]);
 
   // FUNCTION
   const submitLogin: FormEventHandler<HTMLFormElement> = async (event) => {

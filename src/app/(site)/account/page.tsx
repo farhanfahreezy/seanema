@@ -25,13 +25,14 @@ export default function Home() {
   const [userDetail, setUserDetail] = useState<UserDetail | null>(null);
   const router = useRouter();
   const session = useSession();
+  const userSession = session.data?.user as UserSession;
 
   // HOOKS
   useEffect(() => {
     if (session?.status !== "authenticated") {
       router.push("/login");
     }
-  }, []);
+  }, [session?.status, router]);
 
   // FUNCTION
   const formatter = new Intl.NumberFormat("en-US", {
@@ -40,7 +41,6 @@ export default function Home() {
   });
 
   useEffect(() => {
-    const userSession = session.data?.user as UserSession;
     axios
       .get("/api/getUser/", { params: { username: userSession?.username } })
       .then((res) => {
@@ -51,7 +51,7 @@ export default function Home() {
         setUserDetail(newUserDetail);
       })
       .catch((err) => toast.error(err.response.data.message));
-  }, []);
+  }, [userSession?.username]);
 
   return (
     <div className="relative flex flex-col justify-center items-center w-full min-h-screen overflow-x-hidden">

@@ -54,7 +54,7 @@ const Page: FC<pageProps> = ({ params }) => {
     if (session?.status !== "authenticated") {
       router.push("/login");
     }
-  }, []);
+  }, [session?.status, router]);
 
   // FUNCTION
   const getMovieByTitle = async (
@@ -131,7 +131,7 @@ const Page: FC<pageProps> = ({ params }) => {
         setUserDetail(newUserDetail);
       })
       .catch((err) => console.log(err));
-  }, [params.title]);
+  }, [params.title, userSession?.username]);
 
   return (
     <div className="relative flex flex-col justify-center items-center w-full min-h-screen overflow-x-hidden py-[150px]">

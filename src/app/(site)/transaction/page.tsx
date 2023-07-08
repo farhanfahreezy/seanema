@@ -49,7 +49,7 @@ export default function Home() {
         })
         .catch((err) => console.log(err));
     }
-  }, []);
+  }, [router, session?.status, userSession?.username]);
 
   // FUNCTION
   const onRefundClick = (id: string) => {

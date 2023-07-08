@@ -24,15 +24,6 @@ const Navbar = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (session?.status === "authenticated") {
-      setNavbarOption([
-        { label: "Home", path: "/" },
-        { label: "Transaction", path: "/transaction" },
-        { label: "Account", path: "/account" },
-        { label: "Balance", path: "/balance" },
-      ]);
-      setIsLoggedIn(true);
-    }
     const handleScroll = () => {
       const isComponentScrolled = window.scrollY > 25;
 
@@ -45,6 +36,17 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  useEffect(() => {
+    if (session?.status === "authenticated") {
+      setNavbarOption([
+        { label: "Home", path: "/" },
+        { label: "Transaction", path: "/transaction" },
+        { label: "Account", path: "/account" },
+        { label: "Balance", path: "/balance" },
+      ]);
+      setIsLoggedIn(true);
+    }
+  }, [session?.status]);
 
   return (
     <>

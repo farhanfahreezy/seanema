@@ -54,7 +54,7 @@ const Page: FC<pageProps> = ({ params }) => {
     if (session?.status !== "authenticated") {
       router.push("/login");
     }
-  }, []);
+  }, [session?.status, router]);
 
   useEffect(() => {
     console.log(selectedSeat);
@@ -76,7 +76,7 @@ const Page: FC<pageProps> = ({ params }) => {
         setUserDetail(newUserDetail);
       })
       .catch((err) => console.log(err));
-  }, [params.title]);
+  }, [params.title, userSession?.username]);
 
   // FUNCTION
   const getMovieByTitle = async (
