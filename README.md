@@ -1,34 +1,71 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Seanema | A Brand-New Movie Ticket Booking App
 
-## Getting Started
+![Next](https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
 
-First, run the development server:
+Tired of queueing for a movie ticket? Introducing Seanema, our innovative web app powered by Next.js, TypeScript, Prisma, and MongoDB. With Seanema, say goodbye to long lines and hello to seamless movie ticket booking. Each user enjoys a personalized account with balances and transaction histories, providing ultimate convenience. Browse a wide array of movies, effortlessly book tickets, and even refund them if plans change. Seanema also offers easy top-up and withdrawal options, putting you in complete control. Say hello to hassle-free movie magic with Seanema, your go-to movie ticket booking app.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+![Seanema](readme/Preview.png)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Table of Contents
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [Contact](#contact)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Features
 
-## Learn More
+- `Discover Movie` Explore a vast selection of movies, view details like title, description, release date, age rating, trailer, and ticket price, all at your fingertips.
+- `Personalized Account` Enjoy a customized account with individual balances, credentials, and account information, providing a personalized experience.
+- `Book a Movie` Effortlessly book up to 6 tickets per show, and if plans change, easily refund them with a user-friendly interface.
+- `Top-up and Withdraw Balance` Take control of your finances by conveniently topping up and withdrawing funds from your account, ensuring a seamless movie-going experience.
 
-To learn more about Next.js, take a look at the following resources:
+## Installation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To install this web app, follow the steps below:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. Clone this repository or download it as a ZIP file.
+2. Navigate to the root folder and create an `.env` file.
+3. Open `readme/env.txt` and copy all content inside them to you `.env` file.
+4. Open terminal on root folder and run `npm i`.
+5. On the same terminal, run `npm run dev`
+6. Open https://localhost:3000/ in your web browser.
 
-## Deploy on Vercel
+Alternatively, you can directly use this deployed version of this web app by visiting https://seanema.vercel.app.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Usage
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Login & Register
+
+![Login](readme/login.png)
+![Register](readme/register.png)
+
+### Browse Movie
+
+![Browse Movie](readme/browse.png)
+![Movie Detail](readme/Preview.png)
+
+### Ticket Booking & Payment
+
+![Ticket Booking](readme/booking.png)
+![Payment](readme/payment.png)
+
+### Transaction, Account & Balance
+
+![Transaction](readme/transaction.png)
+![Account](readme/account.png)
+![Balance](readme/balance.png)
+
+## Contributing
+
+Mohammad Farhan Fahrezy
+
+## Contact
+
+- [Personal Website](https://farhanfahreezy.site/)
+- [Linkedin](https://www.linkedin.com/in/farhanfahreezy/)
