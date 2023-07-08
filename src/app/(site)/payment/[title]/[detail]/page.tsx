@@ -131,7 +131,7 @@ const Page: FC<pageProps> = ({ params }) => {
         setUserDetail(newUserDetail);
       })
       .catch((err) => console.log(err));
-  }, [params.title, userSession?.username]);
+  }, [params.title, params.detail, userSession?.username]);
 
   return (
     <div className="relative flex flex-col justify-center items-center w-full min-h-screen overflow-x-hidden py-[150px]">

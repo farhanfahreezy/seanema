@@ -1,8 +1,8 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import UserFetcher from "@/components/UserFetcher";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { FC, useEffect, useState } from "react";
@@ -38,6 +38,7 @@ const getMovieByTitle = async (title: string): Promise<MovieDetail | null> => {
 
 const Page: FC<pageProps> = ({ params }) => {
   const [movie, setMovie] = useState<MovieDetail | null | 0>(0);
+  const session = useSession();
 
   useEffect(() => {
     // Decode string uri-nya
@@ -110,7 +111,11 @@ const Page: FC<pageProps> = ({ params }) => {
                 </Link>
               </div>
               <Link
-                href={"/book/" + movie.title}
+                href={
+                  session.status === "authenticated"
+                    ? "/book/" + movie.title
+                    : "/login"
+                }
                 className="text-[36px] py-2 px-6 w-full text-center sm:w-fit font-medium rounded-xl bg-transparent hover:bg-gradient-to-br from-primaryYellow to-secondaryYellow transition-all border-2 border-primaryYellow hover:border-white hover:scale-105 active:scale-95"
               >
                 Buy Ticket

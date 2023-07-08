@@ -4,7 +4,6 @@ import axios from "axios";
 import MovieList from "@/components/MovieList";
 import Navbar from "@/components/Navbar";
 import { useEffect, useState } from "react";
-import UserFetcher from "@/components/UserFetcher";
 import Youtube, { YouTubeProps } from "react-youtube";
 
 interface MovieCardProps {
