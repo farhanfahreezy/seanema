@@ -3,6 +3,7 @@
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { HiOutlineMenu, HiOutlineX } from "react-icons/hi";
 
@@ -20,6 +21,7 @@ const Navbar = () => {
   ]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const session = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     if (session?.status === "authenticated") {
@@ -31,17 +33,17 @@ const Navbar = () => {
       ]);
       setIsLoggedIn(true);
     }
-    // const handleScroll = () => {
-    //   const isComponentScrolled = window.scrollY > 25;
+    const handleScroll = () => {
+      const isComponentScrolled = window.scrollY > 25;
 
-    //   setIsScrolled(isComponentScrolled);
-    // };
+      setIsScrolled(isComponentScrolled);
+    };
 
-    // window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
-    // return () => {
-    //   window.removeEventListener("scroll", handleScroll);
-    // };
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (
@@ -82,6 +84,7 @@ const Navbar = () => {
               if (isLoggedIn) {
                 signOut();
                 setIsLoggedIn(false);
+                router.push("/");
               }
             }}
           >

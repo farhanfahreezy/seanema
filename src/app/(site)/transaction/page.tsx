@@ -17,9 +17,11 @@ interface PaymentDetail {
   tickets: number[];
 }
 
-// DUMMY DATA
-const dummyUsername = "notspidey";
-// END OF DUMMY
+interface UserSession {
+  name: string;
+  username: string;
+}
+
 export default function Home() {
   // CONST
   const [transactionList, setTransactionList] = useState<
@@ -27,6 +29,7 @@ export default function Home() {
   >(null);
   const router = useRouter();
   const session = useSession();
+  const userSession = session.data?.user as UserSession;
 
   // HOOKS
   useEffect(() => {
@@ -35,7 +38,7 @@ export default function Home() {
     } else {
       axios
         .get("/api/getUserTransaction/", {
-          params: { username: dummyUsername },
+          params: { username: userSession?.username },
         })
         .then((res) => {
           const newTransactionList = res.data.map((item: PaymentDetail) => ({
@@ -50,7 +53,7 @@ export default function Home() {
 
   // FUNCTION
   const onRefundClick = (id: string) => {
-    const data = { id, username: dummyUsername };
+    const data = { id, username: userSession?.username };
     axios
       .post("/api/refund/", data)
       .then(() => {
@@ -63,12 +66,16 @@ export default function Home() {
     <div className="relative flex flex-col justify-center items-center w-full min-h-screen overflow-x-hidden">
       <Navbar />
       {transactionList ? (
-        <div className="flex flex-col pt-[150px] w-full max-w-[1000px] px-8 lg:px-10 py-10 gap-5 text-medium items-center justify-center">
-          <TransactionList
-            paymentlist={transactionList}
-            onRefundClick={onRefundClick}
-          />
-        </div>
+        transactionList.length ? (
+          <div className="flex flex-col pt-[150px] w-full max-w-[1000px] px-8 lg:px-10 py-10 gap-5 text-medium items-center justify-center">
+            <TransactionList
+              paymentlist={transactionList}
+              onRefundClick={onRefundClick}
+            />
+          </div>
+        ) : (
+          <div>No transaction history found</div>
+        )
       ) : (
         <div>Loading...</div>
       )}

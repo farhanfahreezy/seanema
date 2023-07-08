@@ -38,10 +38,6 @@ interface UserDetail {
   birthday: Date;
 }
 
-// DUMMY
-const dummyUsername = "notspidey";
-// END OF DUMMY
-
 const Page: FC<pageProps> = ({ params }) => {
   // CONST
   const [paymentDetail, setPaymentDetail] = useState<PaymentDetail | null>(
@@ -51,6 +47,7 @@ const Page: FC<pageProps> = ({ params }) => {
   const [userDetail, setUserDetail] = useState<UserDetail | null>(null);
   const router = useRouter();
   const session = useSession();
+  const userSession = session.data?.user as UserDetail;
 
   // HOOKS
   useEffect(() => {
@@ -125,7 +122,7 @@ const Page: FC<pageProps> = ({ params }) => {
       setPaymentDetail({ title, price: price!, total, date, time, tickets });
     });
     axios
-      .get("/api/getUser/", { params: { username: dummyUsername } })
+      .get("/api/getUser/", { params: { username: userSession?.username } })
       .then((res) => {
         const newUserDetail = {
           ...res.data,

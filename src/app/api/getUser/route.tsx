@@ -10,6 +10,12 @@ export async function GET(request: NextRequest) {
       username: username!,
     },
   });
+  if (!userDb) {
+    return NextResponse.json(
+      { message: "Username not found" },
+      { status: 400 }
+    );
+  }
 
   return NextResponse.json(userDb);
 }

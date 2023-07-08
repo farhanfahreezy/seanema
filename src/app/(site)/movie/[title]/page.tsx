@@ -85,8 +85,8 @@ const Page: FC<pageProps> = ({ params }) => {
             <div className="flex flex-col justify-center items-start w-auto">
               <div className="text-[48px] font-medium">{movie.title}</div>
               <div className="text-[24px] font-light">{movie.description}</div>
-              <div className="flex flex-col sm:flex-row pb-10 sm:pb-5 items-center sm:gap-5">
-                <div className="flex flex-row items-center gap-5 py-5 sm:py-10">
+              <div className="flex flex-col xl:flex-row pb-10 xl:pb-5 items-center xl:gap-5">
+                <div className="flex flex-row items-center gap-5 py-5 xl:py-10">
                   <div className="flex flex-col bg-gradient-to-br from-primaryYellow to-secondaryYellow items-center justify-center py-2 px-4 rounded-xl gap-2">
                     <div className="font-medium text-[16px]">Release Date</div>
                     <div className="bg-secondaryBg px-3 py-1 rounded-md">

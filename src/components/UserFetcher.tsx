@@ -4,8 +4,6 @@ import { getServerSession } from "next-auth/next";
 interface UserSession {
   name: string;
   username: string;
-  birthday: Date;
-  balance: string;
 }
 
 interface UserFetcherProps {

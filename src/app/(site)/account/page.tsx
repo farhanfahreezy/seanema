@@ -1,12 +1,12 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
-import UserFetcher from "@/components/UserFetcher";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 interface UserDetail {
   name: string;
@@ -15,9 +15,10 @@ interface UserDetail {
   birthday: Date;
 }
 
-// DUMMY
-const dummyUsername = "notspidey";
-// END OF DUMMY
+interface UserSession {
+  name: string;
+  username: string;
+}
 
 export default function Home() {
   // CONST
@@ -39,8 +40,9 @@ export default function Home() {
   });
 
   useEffect(() => {
+    const userSession = session.data?.user as UserSession;
     axios
-      .get("/api/getUser/", { params: { username: dummyUsername } })
+      .get("/api/getUser/", { params: { username: userSession?.username } })
       .then((res) => {
         const newUserDetail = {
           ...res.data,
@@ -48,7 +50,7 @@ export default function Home() {
         };
         setUserDetail(newUserDetail);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => toast.error(err.response.data.message));
   }, []);
 
   return (

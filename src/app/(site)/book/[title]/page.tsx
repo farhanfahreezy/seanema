@@ -30,9 +30,12 @@ interface SeatProps {
   handleClick: (id: number) => void;
 }
 
-// DUMMY DATA
-const username = "notspidey";
-// END OF DUMMY
+interface UserDetail {
+  name: string;
+  username: string;
+  balance: number;
+  birthday: Date;
+}
 
 const Page: FC<pageProps> = ({ params }) => {
   // CONST
@@ -40,9 +43,11 @@ const Page: FC<pageProps> = ({ params }) => {
   const [date, setDate] = useState<Date>(new Date());
   const [time, setTime] = useState("11:00");
   const [selectedSeat, setSelectedSeat] = useState<number[]>([]);
+  const [userDetail, setUserDetail] = useState<UserDetail | null>(null);
   const [seatArray, setSeatArray] = useState<SeatProps[] | null | 0>(0);
   const router = useRouter();
   const session = useSession();
+  const userSession = session.data?.user as UserDetail;
 
   // HOOKS
   useEffect(() => {
@@ -52,11 +57,25 @@ const Page: FC<pageProps> = ({ params }) => {
   }, []);
 
   useEffect(() => {
+    console.log(selectedSeat);
+  }, [selectedSeat]);
+
+  useEffect(() => {
     // Decode string uri-nya
     const newTitle = decodeURIComponent(params.title);
     getMovieByTitle(newTitle).then((movies) => {
       setMovie(movies);
     });
+    axios
+      .get("/api/getUser/", { params: { username: userSession?.username } })
+      .then((res) => {
+        const newUserDetail = {
+          ...res.data,
+          birthday: new Date(res.data.birthday),
+        };
+        setUserDetail(newUserDetail);
+      })
+      .catch((err) => console.log(err));
   }, [params.title]);
 
   // FUNCTION
@@ -121,16 +140,28 @@ const Page: FC<pageProps> = ({ params }) => {
   };
 
   function formatDate(date: Date) {
-    const day = date.getDate().toString().padStart(2, "0"); // Get the day and pad with leading zero if necessary
-    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Get the month (Note: month is zero-based) and pad with leading zero if necessary
-    const year = date.getFullYear().toString(); // Get the full year
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear().toString();
 
     return `${day}-${month}-${year}`;
   }
 
-  useEffect(() => {
-    console.log(selectedSeat);
-  }, [selectedSeat]);
+  function isAgeEnough(dateOfBirth: Date, age_rating: number): boolean {
+    const today = new Date();
+    let age = today.getFullYear() - dateOfBirth.getFullYear();
+
+    const hasBirthdayOccurred =
+      today.getMonth() > dateOfBirth.getMonth() ||
+      (today.getMonth() === dateOfBirth.getMonth() &&
+        today.getDate() >= dateOfBirth.getDate());
+
+    if (!hasBirthdayOccurred) {
+      age--;
+    }
+
+    return age >= age_rating;
+  }
 
   return (
     <div className="relative flex flex-col justify-center items-center w-full min-h-screen overflow-x-hidden py-[150px]">
@@ -226,7 +257,11 @@ const Page: FC<pageProps> = ({ params }) => {
                 <div>Loading...</div>
               )}
               {seatArray !== 0 && seatArray !== null ? (
-                selectedSeat.length > 6 || selectedSeat.length < 1 ? (
+                !isAgeEnough(userDetail?.birthday!, movie.age_rating) ? (
+                  <button className="text-[36px] py-2 px-12 font-medium rounded-xl bg-transparent hover:bg-gradient-to-br from-primaryYellow to-secondaryYellow transition-all border-2 border-primaryYellow hover:border-white hover:scale-105 active:scale-95">
+                    Minimum Age of {movie.age_rating}
+                  </button>
+                ) : selectedSeat.length > 6 || selectedSeat.length < 1 ? (
                   <button className="text-[36px] py-2 px-12 font-medium rounded-xl bg-transparent hover:bg-gradient-to-br from-primaryYellow to-secondaryYellow transition-all border-2 border-primaryYellow hover:border-white hover:scale-105 active:scale-95">
                     Please Select 1-6 Seat
                   </button>

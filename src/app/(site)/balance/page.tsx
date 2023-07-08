@@ -13,9 +13,10 @@ interface UserDetail {
   birthday: Date;
 }
 
-// DUMMY
-const dummyUsername = "notspidey";
-// END OF DUMMY
+interface UserSession {
+  name: string;
+  username: string;
+}
 
 export default function Home() {
   // CONST
@@ -41,8 +42,9 @@ export default function Home() {
   });
 
   useEffect(() => {
+    const userSession = session.data?.user as UserSession;
     axios
-      .get("/api/getUser/", { params: { username: dummyUsername } })
+      .get("/api/getUser/", { params: { username: userSession?.username } })
       .then((res) => {
         const newUserDetail = {
           ...res.data,
